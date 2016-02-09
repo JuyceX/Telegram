@@ -1,6 +1,7 @@
 -- WHAT THIS PLUGIN DOES:
 -- An all inclusive plugin (i.e.you don't need to modify nothing on the outside) to link groups, group with BOTs and so on... be creative! :D
--- On the first use, just set variables "d_home_id" and "d_target_id" before or simply set them with proper BOT's command (admin only) Enjoy :D
+-- On the first use, just set variables "d_home_id" and "d_target_id" or simply set them with proper BOT's command (admin only) Enjoy :D
+-- Put this plugin at the top of the list of active plugins.
 
 -- TESTED ON:
 -- TeleSeed (https://github.com/SEEDTEAM/TeleSeed)
@@ -27,7 +28,7 @@ end
 
 local function pre_process(msg)
 	if not msg.text and msg.media then
-		msg.text = '['..msg.media.type..']'
+		msg.text = '[media]'
 	end
 	return msg
 end
@@ -73,9 +74,7 @@ end
 local function run(msg, matches)
 
 	init_bridge_status()
-	print(matches[1]:sub(1,2))
-	print(matches[1]:sub(3,-1))
-	
+
 	--> BOT SETTINGS < --
 	if is_sudo(msg) and matches[1] == '!target' or matches[1] == '!home' then
 		local id
@@ -102,11 +101,11 @@ local function run(msg, matches)
 	
 	-- > MESSAGES HANDLING < --
 	if get_receiver(msg) == target_id then
-	-- FROM TARGET
+	-- TARGET
 		fwd_msg(home_id, msg.id, ok_cb, false)
 		return
 	elseif get_receiver(msg) == home_id then
-	-- FROM HOME
+	-- HOME
 		if msg.media and listen_media == true then
 		-- Medias
 			result = fwd_msg(target_id, msg.id, ok_cb, false)
